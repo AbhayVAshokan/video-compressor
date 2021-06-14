@@ -118,6 +118,9 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
   /// Variable used to track if the video compression is in progress
   bool progressVisibility = false;
 
+  /// Text to be displayed under the folder image
+  String text = "Choose file";
+
   @override
   initState() {
     super.initState();
@@ -140,6 +143,7 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
     ImagePicker.pickVideo(source: ImageSource.gallery).then((videoFile) {
       setState(() {
         file = videoFile;
+        text = videoFile.path;
       });
     });
   }
@@ -178,14 +182,12 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
     String outputPath = newPath + formattedDate + 'trimmed.mp4';
 
     final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
-    final VideoPlayerController videoPlayerController =
-        VideoPlayerController.file(file);
 
     /// Start time of the video
     double s = 0;
 
     /// End time of the video
-    double d = 30 * 1000 / 1;
+    double d = 30 / 1;
     // double d = videoPlayerController.value.duration.inSeconds / 1;
 
     print(
@@ -197,26 +199,15 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
             '-i $path -ss $s -t $d -c:v libx264 -preset ultrafast -crf 30 $outputPath')
         .then((value) async {
       /// Compressed file
-      final File compressedFile = File(outputPath);
 
-      /// VideoPlayerController for compressed file.
-      final VideoPlayerController compressedVideoController =
-          VideoPlayerController.file(compressedFile);
-
-      /// Show results in the dialog.
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Container(
-            child: Column(
-              children: [
-                Text("Uncompressed size: ${videoPlayerController.value.size}"),
-                Text("Size: ${compressedVideoController.value.size}")
-              ],
-            ),
-          );
-        },
-      );
+      file.length().then((uncompressedLength) {
+        File(outputPath).length().then((compressedLength) {
+          setState(() {
+            text =
+                "Uncompressed size: ${uncompressedLength / 1000}KB\nCompressed Size: ${compressedLength / 1000}KB";
+          });
+        });
+      });
 
       setState(() {
         progressVisibility = true;
@@ -260,12 +251,12 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
             ),
             actions: [
               Container(
-                margin: const EdgeInsets.all(15.0),
+                margin: const EdgeInsets.all(18.0),
                 height: 25.0,
                 width: 25.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('lib/assets/images/logo.png'),
+                    image: AssetImage('lib/assets/images/folder.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -294,7 +285,7 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
                         ),
                       ),
                       Text(
-                        file == null ? "Choose File" : "${file.path}",
+                        "$text",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.grey,

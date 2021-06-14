@@ -37,9 +37,9 @@ class _ExitDialogState extends State<ExitDialog> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black,
+                  color: Colors.black26,
                   offset: Offset(0, 10),
-                  blurRadius: 10,
+                  blurRadius: 25,
                 ),
               ]),
           child: Column(
@@ -57,7 +57,10 @@ class _ExitDialogState extends State<ExitDialog> {
               ),
               Text(
                 "Are you sure you want to exit TalentLair Compress?",
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.blueGrey,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
@@ -65,13 +68,29 @@ class _ExitDialogState extends State<ExitDialog> {
               ),
               Align(
                 alignment: Alignment.bottomRight,
-                child: TextButton(
-                  onPressed: () => SystemChannels.platform
-                      .invokeMethod('SystemNavigator.pop'),
-                  child: Text(
-                    "Yes",
-                    style: TextStyle(fontSize: 18),
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => SystemChannels.platform
+                          .invokeMethod('SystemNavigator.pop'),
+                      child: Text(
+                        "Yes",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        "No",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -87,8 +106,16 @@ class _ExitDialogState extends State<ExitDialog> {
               borderRadius: BorderRadius.all(
                 Radius.circular(45),
               ),
-              child: Image.asset(
-                "../assets/images/logo.png",
+              child: Container(
+                height: 60.0,
+                width: 65.0,
+                margin: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("lib/assets/images/folder.png"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
           ),
