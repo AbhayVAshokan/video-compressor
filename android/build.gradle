@@ -1,4 +1,5 @@
 buildscript {
+    ext.flutterFFmpegPackage = 'video'
     ext.kotlin_version = '1.3.50'
     repositories {
         google()
@@ -29,5 +30,5 @@ task clean(type: Delete) {
 }
 
 ext {
-    flutterFFmpegPackage  = "full-gpl-lts"
+    flutterFFmpegPackage  = "min-gpl-lts"
 }

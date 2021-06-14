@@ -24,8 +24,12 @@ class _ExitDialogState extends State<ExitDialog> {
     return Stack(
       children: <Widget>[
         Container(
-          padding:
-              EdgeInsets.only(left: 20, top: 45 + 20, right: 20, bottom: 20),
+          padding: EdgeInsets.only(
+            left: 20,
+            top: 65,
+            right: 20,
+            bottom: 20,
+          ),
           margin: EdgeInsets.only(top: 45),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
@@ -33,14 +37,20 @@ class _ExitDialogState extends State<ExitDialog> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
+                  color: Colors.black,
+                  offset: Offset(0, 10),
+                  blurRadius: 10,
+                ),
               ]),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
                 "Exit TalentLair Compress?",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               SizedBox(
                 height: 15,
@@ -56,12 +66,13 @@ class _ExitDialogState extends State<ExitDialog> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: TextButton(
-                    onPressed: () => SystemChannels.platform
-                        .invokeMethod('SystemNavigator.pop'),
-                    child: Text(
-                      "Yes",
-                      style: TextStyle(fontSize: 18),
-                    )),
+                  onPressed: () => SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop'),
+                  child: Text(
+                    "Yes",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
               ),
             ],
           ),
