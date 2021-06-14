@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.talentlair_compress">
    <application
-        android:label="talentlair_compress"
+        android:label="TalentLair Compress"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
