@@ -37,9 +37,39 @@ void main() {
 class TalentLairCompress extends StatefulWidget {
   @override
   _TalentLairCompressState createState() => _TalentLairCompressState();
+
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+
+  @override
+  BuildContext get context => throw UnimplementedError();
+
+  @override
+  void deactivate() {}
+
+  @override
+  void didUpdateWidget(covariant StatefulWidget oldWidget) {}
+
+  @override
+  void initState() {}
+
+  @override
+  bool get mounted => throw UnimplementedError();
+
+  @override
+  void reassemble() {}
+
+  @override
+  void setState(VoidCallback fn) {}
+
+  @override
+  StatefulWidget get widget => throw UnimplementedError();
 }
 
-class _TalentLairCompressState extends State<TalentLairCompress> {
+class _TalentLairCompressState extends State<TalentLairCompress>
+    with SingleTickerProviderStateMixin {
   /// List of all available encoders.
   final List<String> encoders = [
     'fontconfig',
@@ -116,10 +146,14 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
   File file;
 
   /// Variable used to track if the video compression is in progress
-  bool progressVisibility = false;
+  // bool progressVisibility = false;
 
   /// Text to be displayed under the folder image
   String text = "Choose file";
+
+  /// [Animation] and [AnimationController] for folder size animation.
+  Animation animation;
+  AnimationController _controller;
 
   @override
   initState() {
@@ -136,6 +170,24 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
         outputPath = "${applicationDirectory.path}/output.mp4";
       });
     });
+
+    // Initializing [AnimationController]
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    // Defining animation
+    animation = Tween(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(_controller);
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   /// Function to choose a file from your device
@@ -151,7 +203,10 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
   /// Function to compress video according to the custom parameters.
   void processVideo({@required context}) async {
     setState(() {
-      progressVisibility = true;
+      // progressVisibility = true;
+      text = "Compressing... please be patient!";
+      _controller.repeat(reverse: true);
+      // _controller.forward();
     });
 
     /// Path of cache directory
@@ -198,8 +253,6 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
         .execute(
             '-i $path -ss $s -t $d -c:v libx264 -preset ultrafast -crf 30 $outputPath')
         .then((value) async {
-      /// Compressed file
-
       file.length().then((uncompressedLength) {
         File(outputPath).length().then((compressedLength) {
           setState(() {
@@ -210,8 +263,9 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
       });
 
       setState(() {
-        progressVisibility = true;
+        // progressVisibility = true;
         file = null;
+        _controller.stop();
       });
     });
   }
@@ -274,14 +328,21 @@ class _TalentLairCompressState extends State<TalentLairCompress> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 100.0,
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('lib/assets/images/folder.png'),
-                            fit: BoxFit.contain,
+                      AnimatedBuilder(
+                        animation: _controller,
+                        child: Container(
+                          width: 100.0,
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('lib/assets/images/folder.png'),
+                              fit: BoxFit.contain,
+                            ),
                           ),
+                        ),
+                        builder: (context, child) => Transform.scale(
+                          child: child,
+                          scale: animation.value,
                         ),
                       ),
                       Text(
