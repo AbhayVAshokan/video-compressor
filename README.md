@@ -1,16 +1,18 @@
-# talentlair_compress
+# Video Compressor
 
-A new Flutter project.
+Video compressor application that gives more control over the type of encoder, quality, and bitrate through encoder params.
 
-## Getting Started
+## Screenshot
+<img src=".github/screenshot.jpg" width=200>
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Setup
+```bash
+git clone https://github.com/AbhayVAshokan/video-compressor
+cd video-compressor
+flutter pub get
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Contributions
+This application has been created where I had a specific requirement to compress videos and trim the first 30 seconds. Do feel free to pull request for compressing the full video, or for any other features.
