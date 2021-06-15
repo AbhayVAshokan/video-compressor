@@ -38,33 +38,24 @@ class TalentLairCompress extends StatefulWidget {
   @override
   _TalentLairCompressState createState() => _TalentLairCompressState();
 
-  @override
   Widget build(BuildContext context) {
     throw UnimplementedError();
   }
 
-  @override
   BuildContext get context => throw UnimplementedError();
 
-  @override
   void deactivate() {}
 
-  @override
   void didUpdateWidget(covariant StatefulWidget oldWidget) {}
 
-  @override
   void initState() {}
 
-  @override
   bool get mounted => throw UnimplementedError();
 
-  @override
   void reassemble() {}
 
-  @override
   void setState(VoidCallback fn) {}
 
-  @override
   StatefulWidget get widget => throw UnimplementedError();
 }
 
@@ -234,7 +225,9 @@ class _TalentLairCompressState extends State<TalentLairCompress>
     String path = file.path;
 
     /// Output video path
-    String outputPath = newPath + formattedDate + 'trimmed.mp4';
+    setState(() {
+      outputPath = newPath + formattedDate + 'trimmed.mp4';
+    });
 
     final FlutterFFmpeg _flutterFFmpeg = new FlutterFFmpeg();
 
@@ -246,12 +239,12 @@ class _TalentLairCompressState extends State<TalentLairCompress>
     // double d = videoPlayerController.value.duration.inSeconds / 1;
 
     print(
-        "Executing FlutterFFMpeg command: '-i $path -ss $s -t $d -c:v libx264 -preset ultrafast -crf 30 $outputPath'");
+        "Executing FlutterFFMpeg command: '-i $path -ss $s -t $d -c:v $encoder -preset $preset -crf $crf $outputPath'");
 
     /// Executing the encoding with the selected params.
     _flutterFFmpeg
         .execute(
-            '-i $path -ss $s -t $d -c:v libx264 -preset ultrafast -crf 30 $outputPath')
+            '-i $path -ss $s -t $d -c:v $encoder -preset $preset -crf $crf $outputPath')
         .then((value) async {
       file.length().then((uncompressedLength) {
         File(outputPath).length().then((compressedLength) {
@@ -266,6 +259,8 @@ class _TalentLairCompressState extends State<TalentLairCompress>
         // progressVisibility = true;
         file = null;
         _controller.stop();
+
+        Fluttertoast.showToast(msg: "Succcessfully compressed video");
       });
     });
   }
@@ -449,6 +444,34 @@ class _TalentLairCompressState extends State<TalentLairCompress>
               ),
             ],
           ),
+          floatingActionButton: text.contains("Uncompressed")
+              ? FloatingActionButton(
+                  tooltip: "Save video",
+                  backgroundColor: Colors.red,
+                  onPressed: () async {
+                    /// Compressed video
+                    File outputFile = File(outputPath);
+
+                    VideoPlayerController _controller =
+                        VideoPlayerController.file(outputFile)..initialize();
+                    _controller.play();
+
+                    showDialog(
+                      context: context,
+                      builder: (context) => Dialog(
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: VideoPlayer(_controller),
+                        ),
+                      ),
+                    ).then((value) => _controller.pause());
+                  },
+                  child: Icon(
+                    FlutterIcons.play_arrow_mdi,
+                    color: Colors.white,
+                  ),
+                )
+              : null,
         ),
       ),
     );
