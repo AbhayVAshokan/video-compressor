@@ -63,35 +63,10 @@ class _TalentLairCompressState extends State<TalentLairCompress>
     with SingleTickerProviderStateMixin {
   /// List of all available encoders.
   final List<String> encoders = [
-    'fontconfig',
-    'freetype',
-    'fribidi',
-    'gmp',
-    'gnutls',
-    'kvazaar',
-    'lame',
-    'libaom',
-    'libass',
-    'libiconv',
-    'libilbc',
-    'libtheora',
-    'libvorbis',
-    'libvpx',
-    'libwebp',
-    'libxml2',
-    'opencore-amr',
-    'opus',
-    'shine',
-    'snappy',
-    'soxr',
-    'speex',
-    'twolame',
-    'vid.stab',
-    'vo-amrwbenc',
-    'wavpack',
-    'x264',
-    'x265',
-    'xvidcore'
+    'libx264',
+    'libx265',
+    'libxvid',
+    'h264',
   ];
 
   /// List of available presets
